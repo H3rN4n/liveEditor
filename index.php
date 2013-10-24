@@ -6,20 +6,22 @@
 	<style type="text/css">
 	#pageContainer{
 		position: relative;
-		width: 100%;
+		width: 70%;
 		margin-top: 0px;
 		background: blue;
 		margin: 0;
 		padding: 0;
+		float: left;
 	}
 	.editZone{
 		position: relative;
-		width: 100%;
-		height: 280px;
+		width: 30%;
+		height: 100%;
 		border-bottom: 5px solid blue;
 		margin: 0;
 		padding: 0;
-		transition: 2s;
+		transition: margin-top 2s;
+		float: left;
 	}
 	.editZone.inactive{
 		width: 100%;

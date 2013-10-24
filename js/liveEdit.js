@@ -1,6 +1,7 @@
 var liveEditorController = {
 	'params' : {
-		'mceInitialized' : false
+		'mceInitialized' : false,
+		'activeElement' : null
 	},
 	'init' : function(){
 		console.log('liveEditorController->init');
@@ -28,7 +29,7 @@ var liveEditorController = {
 			if(liveEditorController.params.mceInitialized == false){
 				liveEditorController.startTinyMCE();							
 			}else{
-				liveEditorController.setActiveElementContent();	
+				liveEditorController.setActiveElementContent();
 			}
 		//});
 	},
@@ -44,21 +45,33 @@ var liveEditorController = {
 		  url: "templates/"+selected,
 		  context: document.body
 		}).done(function(data) {
-			liveEditorController.setActiveElementContent(data);
+			//liveEditorController.setActiveElementContent(data);
 		    $("#pageContainer").empty().html(data);
+		    liveEditorController.getActiveElementContent();	
 		});
 	},
-	setActiveElementContent : function(data){
+	'setActiveElementContent' : function(data){
 		//var elementContent = $(".element.active").html();
 		tinyMCE.activeEditor.setContent(data, {format : 'raw'});
 	},
-	startTinyMCE : function(){
+	'getActiveElementContent' : function(){
+		console.log('getActiveElementContent');
+		$("#pageContainer div").on('click', function(event){
+			event.preventDefault();
+			var self = $(this),
+			index = self.index();
+			liveEditorController.params.activeElement = self;
+			var content = $(this).html();
+			liveEditorController.setActiveElementContent(content);
+		});
+	},
+	'startTinyMCE' : function(){
 		console.log("Initializing TinyMCE");
 		tinymce.init({
 		    selector: "#mceZone",
 		    theme: "modern",
 		    width: '100%',
-		    height: 150,
+		    height: 350,
 		    plugins: [
 		         "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
 		         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
@@ -80,7 +93,7 @@ var liveEditorController = {
 		        editor.on('change', function(e) {
 		            console.log('change event', e);
 		            var content = tinyMCE.activeEditor.getContent({format : 'raw'});
-		            $("#pageContainer").html(content);
+		            liveEditorController.params.activeElement.html(content);
 		        });
 		    }
 		 });
