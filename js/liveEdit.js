@@ -6,7 +6,7 @@ var liveEditorController = {
 		console.log('liveEditorController->init');
 		
 		this.openEditor();
-		this.closeEditor();
+		//this.closeEditor();
 		this.themeSelectorListener();
 	},
 	closeEditor : function(){
@@ -19,18 +19,18 @@ var liveEditorController = {
 		});
 	},
 	'openEditor' : function(){
-		$(".element").on('click', function(){
-			var self = $(this),
-				index = self.index();
-				$(".element.active").removeClass('active');
-				$(this).addClass('active');
-				$(".editZone").removeClass('inactive');
-				if(liveEditorController.params.mceInitialized == false){
-					liveEditorController.startTinyMCE();							
-				}else{
-					liveEditorController.setActiveElementContent();	
-				}
-		});
+		//$(".element").on('click', function(){
+			//var self = $(this),
+			//index = self.index();
+			$(".element.active").removeClass('active');
+			$(this).addClass('active');
+			$(".editZone").removeClass('inactive');
+			if(liveEditorController.params.mceInitialized == false){
+				liveEditorController.startTinyMCE();							
+			}else{
+				liveEditorController.setActiveElementContent();	
+			}
+		//});
 	},
 	'themeSelectorListener' : function(){
 		$("#themeSelector").on('change', function(){
@@ -44,12 +44,13 @@ var liveEditorController = {
 		  url: "templates/"+selected,
 		  context: document.body
 		}).done(function(data) {
-		   $("#pageContainer").empty().html(data);
+			liveEditorController.setActiveElementContent(data);
+		    $("#pageContainer").empty().html(data);
 		});
 	},
-	setActiveElementContent : function(){
-		var elementContent = $(".element.active").html();
-		tinyMCE.activeEditor.setContent(elementContent, {format : 'raw'});
+	setActiveElementContent : function(data){
+		//var elementContent = $(".element.active").html();
+		tinyMCE.activeEditor.setContent(data, {format : 'raw'});
 	},
 	startTinyMCE : function(){
 		console.log("Initializing TinyMCE");
@@ -79,7 +80,7 @@ var liveEditorController = {
 		        editor.on('change', function(e) {
 		            console.log('change event', e);
 		            var content = tinyMCE.activeEditor.getContent({format : 'raw'});
-		            $(".element.active").html(content);
+		            $("#pageContainer").html(content);
 		        });
 		    }
 		 });
