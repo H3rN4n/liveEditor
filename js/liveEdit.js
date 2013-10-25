@@ -1,7 +1,8 @@
 var liveEditorController = {
 	'params' : {
 		'mceInitialized' : false,
-		'activeElement' : null
+		'activeElement' : null,
+		'activeImage' : null
 	},
 	'init' : function(){
 		console.log('liveEditorController->init');
@@ -9,6 +10,13 @@ var liveEditorController = {
 		this.openEditor();
 		//this.closeEditor();
 		this.themeSelectorListener();
+		this.updateEditZoneHeight();
+	},
+	'updateEditZoneHeight': function(){
+		console.log('updateEditZoneHeight');
+		var h = $(window).height();
+		$(".editZone").height(h - 5);
+
 	},
 	closeEditor : function(){
 		$("#close").on('click',function(){
@@ -36,7 +44,7 @@ var liveEditorController = {
 	'themeSelectorListener' : function(){
 		$("#themeSelector").on('change', function(){
 			var selected = $('#themeSelector option:selected').val();
-			console.log(selected);
+			//console.log(selected);
 			liveEditorController.getTheme(selected);
 		});
 	},
@@ -48,6 +56,16 @@ var liveEditorController = {
 			//liveEditorController.setActiveElementContent(data);
 		    $("#pageContainer").empty().html(data);
 		    liveEditorController.getActiveElementContent();	
+		    liveEditorController.getImgUrl();
+		    liveEditorController.setImgURl();
+		    liveEditorController.putSampleListener();
+		});
+	},
+	'putSampleListener': function(){
+		$("#putSample").on('click', function(){
+			var url = "http://lorempixel.com/"+$('#imgW span').text()+"/"+$('#imgH span').text()+"/";
+			//$('#imgUrl').val(url);
+			liveEditorController.params.activeImage.attr('src', url);
 		});
 	},
 	'setActiveElementContent' : function(data){
@@ -65,13 +83,30 @@ var liveEditorController = {
 			liveEditorController.setActiveElementContent(content);
 		});
 	},
+	'getImgUrl' : function(){
+		$('#pageContainer img').on('click', function(event){
+			event.preventDefault();
+			var self = $(this);
+			liveEditorController.params.activeImage = self;
+			var content = self.attr('src');
+			$("#imgUrl").val(content);
+			$("#imgW span").text(self.width());
+			$("#imgH span").text(self.height());
+		});
+	},
+	'setImgURl' : function(){
+		$('#imgUrl').on('change', function(event){
+			var content = $(this).val();
+			liveEditorController.params.activeImage.attr('src', content);
+		});
+	},
 	'startTinyMCE' : function(){
 		console.log("Initializing TinyMCE");
 		tinymce.init({
 		    selector: "#mceZone",
 		    theme: "modern",
 		    width: '100%',
-		    height: 350,
+		    height: 200,
 		    plugins: [
 		         "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
 		         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",

@@ -4,6 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Live Editor</title>
 	<style type="text/css">
+	body{
+		margin: 0;
+		padding: 0;
+	}
 	#pageContainer{
 		position: relative;
 		width: 70%;
@@ -11,21 +15,23 @@
 		background: blue;
 		margin: 0;
 		padding: 0;
-		float: left;
+		float: right;
 	}
 	.editZone{
-		position: relative;
+		position: fixed;
+		left: 0;
+		top: 0;
 		width: 30%;
 		height: 100%;
 		border-bottom: 5px solid blue;
 		margin: 0;
 		padding: 0;
-		transition: margin-top 2s;
+		transition: width 2s;
 		float: left;
 	}
 	.editZone.inactive{
 		width: 100%;
-		margin-top: -290px;
+		width: 0px;
 	}
 	#close{
 		position: relative;
@@ -33,6 +39,39 @@
 		height: 20px;
 		background: silver;
 	}
+
+	#imgUrl{
+		width: 95%;
+		padding: 5px;
+		text-align: left;
+	}
+
+	/*DARKEN*/
+	#pageContainer img {
+	  -webkit-filter: brightness(100%);
+	  -webkit-transition: all 1s ease;
+	     -moz-transition: all 1s ease;
+	       -o-transition: all 1s ease;
+	      -ms-transition: all 1s ease;
+	          transition: all 1s ease;
+	}
+	 
+	#pageContainer img:hover {
+	  -webkit-filter: brightness(90%);
+	}
+
+	#pageContainer div {
+	  -webkit-transition: all 1s ease;
+	     -moz-transition: all 1s ease;
+	       -o-transition: all 1s ease;
+	      -ms-transition: all 1s ease;
+	          transition: all 1s ease;
+	}
+	 
+	#pageContainer div:hover {
+	  background-color: rgba(0,0,0,0.1);
+	}
+
 	</style>
 </head>
 <body>
@@ -40,6 +79,7 @@
 			<div id="close">
 				<div id="themeSelectorContainer">
 					<select id="themeSelector">
+						<option>Select One</option>
 						<?php
 						$directorio = opendir("templates"); //ruta actual
 						while ($archivo = readdir($directorio)) //obtenemos un archivo y luego otro sucesivamente
@@ -58,6 +98,21 @@
 				</div>
 			</div>
 			<div id="mceZone"></div>
+			<div id="imageEditZone">
+				<input type="text" value="" id="imgUrl">
+				<br/>
+				<div id="imgW">
+					Width: <span></span>
+				</div>
+				<br/>
+				<div id="imgH">
+					Height: <span></span>
+				</div>
+				<br/>
+				<div id="SampleImg">
+					<input type="button" value="SampleImg" id="putSample">
+				</div>
+			</div>
 	</div>
 	<div id="pageContainer">
 
